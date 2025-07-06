@@ -23,6 +23,7 @@ module.exports = function(io) {
       io.emit('newMessage', msgObj);
       res.status(201).json({ message: 'Message posted successfully.' });
     } catch (err) {
+      console.error('Error creating message:', err);
       res.status(500).json({ message: 'Server error.' });
     }
   });
@@ -36,6 +37,7 @@ module.exports = function(io) {
         .lean();
       res.json(messages);
     } catch (err) {
+      console.error('Error fetching messages:', err);
       res.status(500).json({ message: 'Server error.' });
     }
   });
@@ -57,6 +59,7 @@ module.exports = function(io) {
       io.emit('messageUpdated', message.toObject());
       res.json({ likes: message.likes.length, liked: !liked });
     } catch (err) {
+      console.error('Error toggling like:', err);
       res.status(500).json({ message: 'Server error.' });
     }
   });
@@ -88,6 +91,7 @@ module.exports = function(io) {
         timestamp: lastComment.timestamp
       }});
     } catch (err) {
+      console.error('Error adding comment:', err);
       res.status(500).json({ message: 'Server error.' });
     }
   });
@@ -110,6 +114,7 @@ module.exports = function(io) {
       io.emit('messageUpdated', message.toObject());
       res.json({ message: 'Message updated.' });
     } catch (err) {
+      console.error('Error updating message:', err);
       res.status(500).json({ message: 'Server error.' });
     }
   });
@@ -122,10 +127,11 @@ module.exports = function(io) {
       if (message.author.toString() !== req.user.id) {
         return res.status(403).json({ message: 'Not authorized.' });
       }
-      await message.deleteOne();
+      await Message.findByIdAndDelete(req.params.id);
       io.emit('messageDeleted', { _id: req.params.id });
       res.json({ message: 'Message deleted.' });
     } catch (err) {
+      console.error('Error deleting message:', err);
       res.status(500).json({ message: 'Server error.' });
     }
   });
