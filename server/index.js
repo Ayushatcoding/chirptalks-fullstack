@@ -136,6 +136,7 @@ app.get('/health', (req, res) => {
 app.use('/api', authRoutes);
 
 const messageRoutes = require('./routes/messages')(io);
+console.log('DEBUG: typeof messageRoutes:', typeof messageRoutes, 'value:', messageRoutes);
 app.use('/api/messages', messageRoutes);
 
 // 404 handler
