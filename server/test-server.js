@@ -1,6 +1,6 @@
 const fetch = require('node-fetch');
 
-const BASE_URL = 'http://localhost:5000';
+const BASE_URL = 'https://chirptalks-backend.onrender.com';
 
 async function testServer() {
     console.log('🧪 Testing ChirpTalks Server...\n');
